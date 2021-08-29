@@ -3,10 +3,10 @@ spring:
   application:
     name: loans
 
-    profiles:
+  profiles:
       active: prod
 
-    config:
+  config:
       import: optional:configserver:http://localhost:8071
 
   datasource:
@@ -28,3 +28,23 @@ management:
     web:
       exposure:
         include: "*"
+    enabled-by-default: true
+    shutdown: true
+
+
+#eureka
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://localhost:8070/eureka/
+
+# info endpoint
+info:
+  app:
+    name: Loans Mircoroservice
+    description: Bank loans app
+    version: 1.0.0
