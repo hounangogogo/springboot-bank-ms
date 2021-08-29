@@ -9,6 +9,7 @@ import com.ms.accounts.feignClient.LoansFeignClient;
 import com.ms.accounts.model.*;
 import com.ms.accounts.service.AccountsService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -64,7 +65,6 @@ public class AccountsController {
         return customerDetails;
     }
 
-
     private CustomerDetails myCustomerDetailsFallBack(Customer customer, Throwable t) {
         Accounts accounts = accountsService.getAccountDetails(customer.getCustomerId());
         List<Loans> loans = loansFeignClient.getLoansDetails(customer);
@@ -73,4 +73,25 @@ public class AccountsController {
         customerDetails.setLoans(loans);
         return customerDetails;
     }
+
+
+    @PostMapping("/myCustomerCards")
+    @Retry(name = "retryForCustomerCards", fallbackMethod = "retryForCustomerCardsFallBack")
+    public CustomerDetails customerDetailsWithCards(@RequestBody Customer customer) {
+        Accounts accounts = accountsService.getAccountDetails(customer.getCustomerId());
+        List<Cards> cards = cardsFeignClient.getCardDetails(customer);
+        CustomerDetails customerDetails = new CustomerDetails();
+        customerDetails.setAccounts(accounts);
+        customerDetails.setCards(cards);
+        return customerDetails;
+    }
+
+
+    public CustomerDetails retryForCustomerCardsFallBack(@RequestBody Customer customer, Throwable t) {
+        Accounts accounts = accountsService.getAccountDetails(customer.getCustomerId());
+        CustomerDetails customerDetails = new CustomerDetails();
+        customerDetails.setAccounts(accounts);
+        return customerDetails;
+    }
+
 }

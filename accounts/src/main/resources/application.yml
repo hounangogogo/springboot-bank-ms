@@ -57,8 +57,8 @@ info:
     description: Bank account app
     version: 1.0.0
 
-# circuit breaker
 resilience4j:
+  # circuit breaker
   circuitbreaker:
     configs:
       default:
@@ -69,3 +69,12 @@ resilience4j:
         failureRateThreshold: 50
         waitDurationInOpenState: 30000
         permittedNumberOfCallsInHalfOpenState: 2
+  # retry
+  retry:
+    configs:
+      default:
+        registerHealthIndicator: true
+    instances:
+      retryForCustomerDetails:
+        maxRetryAttempts: 3
+        waitDuration: 2000
