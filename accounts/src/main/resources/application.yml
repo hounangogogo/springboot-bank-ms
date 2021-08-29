@@ -1,5 +1,9 @@
 # Spring Config
 spring:
+  devtools:
+    restart:
+      enabled: true
+
   application:
     name: accounts
 
@@ -53,3 +57,15 @@ info:
     description: Bank account app
     version: 1.0.0
 
+# circuit breaker
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        registerHealthIndicator: true
+    instances:
+      detailsForCustomerSupportApp:
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 30000
+        permittedNumberOfCallsInHalfOpenState: 2
