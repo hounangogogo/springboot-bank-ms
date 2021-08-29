@@ -9,6 +9,7 @@ import com.ms.accounts.feignClient.LoansFeignClient;
 import com.ms.accounts.model.*;
 import com.ms.accounts.service.AccountsService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,6 +93,18 @@ public class AccountsController {
         CustomerDetails customerDetails = new CustomerDetails();
         customerDetails.setAccounts(accounts);
         return customerDetails;
+    }
+
+
+
+    @GetMapping("/sayHello")
+    @RateLimiter(name="sayHello", fallbackMethod = "sayHelloFallback")
+    public String sayHello() {
+        return "Hello, from sayHello";
+    }
+
+    private String sayHelloFallback(Throwable t) {
+        return "hi, from fallback";
     }
 
 }
