@@ -1,0 +1,10 @@
+# Spring config
+spring:
+  application:
+    name: eurekaserver
+  config:
+    import: optional:configserver:http://localhost:8071
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
