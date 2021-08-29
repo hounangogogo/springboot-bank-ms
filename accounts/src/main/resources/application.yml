@@ -1,5 +1,5 @@
+# Spring Config
 spring:
-
   application:
     name: accounts
 
@@ -23,5 +23,15 @@ spring:
     console:
       enabled: true
 
+# server config
 server:
   port: 8080
+
+# management config
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+
