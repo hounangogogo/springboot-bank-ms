@@ -26,8 +26,9 @@ public class LoansController {
 
     @PostMapping("/myLoans")
     public List<Loans> getLoansDetails(@RequestBody Customer customer) {
-        log.info("getLoansDetails() method from controller");
+        log.info("getLoansDetails() method started");
         List<Loans> loans = loansService.getLoansDetails(customer.getCustomerId());
+        log.info("getLoansDetails() method ended");
         return loans;
     }
 

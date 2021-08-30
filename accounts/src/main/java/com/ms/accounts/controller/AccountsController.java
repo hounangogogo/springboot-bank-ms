@@ -56,6 +56,7 @@ public class AccountsController {
     @PostMapping("/myCustomerDetails")
     @CircuitBreaker(name = "detailsForCustomerSupportApp", fallbackMethod = "myCustomerDetailsFallBack")
     public CustomerDetails myCustomerDetails(@RequestBody Customer customer) {
+        log.info("My customerDetails() method started");
         Accounts accounts = accountsService.getAccountDetails(customer.getCustomerId());
         List<Loans> loans = loansFeignClient.getLoansDetails(customer);
         List<Cards> cards = cardsFeignClient.getCardDetails(customer);
@@ -63,6 +64,7 @@ public class AccountsController {
         customerDetails.setAccounts(accounts);
         customerDetails.setLoans(loans);
         customerDetails.setCards(cards);
+        log.info("My customerDetails() method ended");
         return customerDetails;
     }
 

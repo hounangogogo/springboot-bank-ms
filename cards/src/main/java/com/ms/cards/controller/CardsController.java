@@ -30,7 +30,9 @@ public class CardsController {
     @PostMapping("/myCards")
     public List<Cards> getCardDetails(@RequestBody Customer customer) {
         log.info("getCardDetails() method started");
-        return cardsService.getCardDetails(customer.getCustomerId());
+        List<Cards> cards = cardsService.getCardDetails(customer.getCustomerId());
+        log.info("getCardDetails() method ended");
+        return cards;
     }
 
     @GetMapping("/cards/properties")
