@@ -25,7 +25,7 @@ public class LoansController {
     private LoansServiceConfig loansConfig;
 
     @PostMapping("/myLoans")
-    public List<Loans> getLoansDetails(String correlationId, @RequestBody Customer customer) {
+    public List<Loans> getLoansDetails(@RequestBody Customer customer) {
         log.info("getLoansDetails() method from controller");
         List<Loans> loans = loansService.getLoansDetails(customer.getCustomerId());
         return loans;

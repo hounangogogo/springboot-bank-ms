@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: gatewayserver
+  config:
+    import: optional:configserver:http://localhost:8071
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+info:
+  app:
+    name: Gateway server microservice
+    description: hounan bank gateway server app
+    version: 1.0.0
+logging:
+  level:
+    come:
+      hounan:
+        gatewayserver: DEBUG
