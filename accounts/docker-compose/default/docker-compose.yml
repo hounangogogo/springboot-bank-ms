@@ -2,6 +2,15 @@ version: "3.8"
 
 services:
 
+  zipkin:
+    image: openzipkin/zipkin
+    mem_limit: 700m
+    ports:
+      - "9411:9411"
+    networks:
+      - hounan-network
+
+
   configserver:
     image: hounangogogo/configserver:latest
     mem_limit: 700m
@@ -9,6 +18,11 @@ services:
       - "8071:8071"
     networks:
       - hounan-network
+    depends_on:
+      - zipkin
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
 
   eurekaserver:
     image: hounangogogo/eurekaserver
@@ -22,12 +36,13 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
-        delay: 5s
+        delay: 15s
         max_attempts: 3
         window: 120s
     environment:
       SPRING_PROFILES_ACTIVE: default
       SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+      SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
 
   accounts:
     image: hounangogogo/accounts:latest
@@ -49,6 +64,7 @@ services:
         SPRING_PROFILES_ACTIVE: default
         SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
         EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+        SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
 
   loans:
     image: hounangogogo/loans:latest
@@ -70,6 +86,7 @@ services:
         SPRING_PROFILES_ACTIVE: default
         SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
         EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+        SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
 
   cards:
     image: hounangogogo/cards:latest
@@ -91,6 +108,7 @@ services:
         SPRING_PROFILES_ACTIVE: default
         SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
         EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+        SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
 
   gateway:
     image: hounangogogo/gateway
@@ -115,6 +133,7 @@ services:
       SPRING_PROFILES_ACTIVE: default
       SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+      SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
 
 networks:
   hounan-network:

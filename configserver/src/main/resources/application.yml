@@ -12,6 +12,14 @@ spring:
           uri: https://github.com/hounangogogo/springboot-bank-config.git
           clone-on-start: true
           default-label: main
+
+  sleuth:
+    sampler:
+      rate: 1
+
+  zipkin:
+    base-url: http://localhost:9411/
+
 server:
   port: 8071
 
